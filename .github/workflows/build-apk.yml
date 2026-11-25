@@ -40,8 +40,14 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Prepare the preinstalled Android SDK
+        # GitHub's ubuntu runners already ship the Android SDK (ANDROID_HOME is set),
+        # so we only accept licenses and make sure the platform Capacitor 8 needs is present.
+        run: |
+          SDKM=$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -1)
+          echo "Using $SDKM"
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" "platforms;android-36" || echo "Could not pre-install platform 36; Gradle will try to download it."
 
       - name: Set up Gradle cache
         uses: gradle/actions/setup-gradle@v4
