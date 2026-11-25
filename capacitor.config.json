@@ -1,0 +1,9 @@
+{
+  "appId": "app.orchestral.sketchpad",
+  "appName": "Orchestral Sketchpad",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#17161a"
+  }
+}

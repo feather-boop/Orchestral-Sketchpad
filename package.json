@@ -1,0 +1,19 @@
+{
+  "name": "orchestral-sketchpad",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sketch orchestral MIDI arrangements on a tablet and export them to your DAW.",
+  "scripts": {
+    "sync": "cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/filesystem": "^8.0.0",
+    "@capacitor/share": "^8.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^4.0.0",
+    "@capacitor/cli": "^8.0.0"
+  }
+}
