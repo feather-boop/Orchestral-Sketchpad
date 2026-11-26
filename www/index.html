@@ -66,22 +66,37 @@ main{flex:1;display:flex;min-height:0}
 #act button{min-height:36px;padding:0 12px}#act button:disabled{opacity:.4}
 #act span{color:var(--mute);font-size:13px;margin-right:6px;min-width:96px}
 #rec{position:fixed;right:12px;bottom:calc(150px + env(safe-area-inset-bottom,0px));z-index:12;background:var(--panel);border:2px solid var(--acc);border-radius:12px;padding:8px 12px;display:flex;gap:10px;align-items:center;box-shadow:0 4px 18px rgba(0,0,0,.3);font-weight:650}
+header{gap:4px 6px;padding:4px 8px}
+header .grp{gap:4px;flex-wrap:nowrap}
+header button,header select,header input[type=number]{min-height:32px;padding:0 8px;font-size:13px;border-radius:7px}
+header button.pri{min-width:0}header label{font-size:11px}header input#tempo{width:50px;padding:0 4px}
+#menuBtn #pname{display:inline-block;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom;font-weight:650}
+#pos{min-width:60px;font-size:12px}.tl span{display:none}@media (min-width:1500px){.tl span{display:inline}}
+#artSel{max-width:108px}
+#act{padding:3px 8px;gap:4px}#act button{min-height:30px;padding:0 9px;font-size:12.5px}#act span{min-width:84px;font-size:12px;margin-right:2px}
+#lanebar{padding:3px 8px;gap:4px}#lanebar button{min-height:28px;padding:0 9px;font-size:12px}#lhint{font-size:11px}
+#lanew{height:80px}
+main{position:relative}
+#zoom{position:absolute;right:14px;bottom:8px;display:flex;gap:4px;z-index:6}
+#zoom button{min-height:0;width:28px;height:28px;padding:0;font-size:16px;line-height:1;border-radius:7px;opacity:.88}
 </style>
 </head>
 <body>
 <header>
-  <button id="menuBtn">☰ Projects</button><h1 id="pname"></h1>
+  <button id="menuBtn" title="Projects">☰ <span id="pname"></span></button>
   <div class="grp"><button id="play" class="pri">▶ Play</button><button id="loop">Loop</button><span id="pos">Bar 1 · 1</span></div>
   <div class="grp"><label for="tempo">BPM</label><input id="tempo" type="number" min="40" max="220" value="90" inputmode="numeric">
     <label for="bars">Bars</label><select id="bars"><option>4</option><option selected>8</option><option>16</option><option>32</option><option>64</option><option>128</option><option>256</option></select>
-    <label for="grid">Grid</label><select id="grid"><option value="4">1/1</option><option value="2">1/2</option><option value="1">1/4</option><option value="0.5" selected>1/8</option><option value="0.25">1/16</option><option value="0.125">1/32</option><option value="0.0625">1/64</option></select><label for="qsel">Pitch</label><select id="qsel"><option value="s">Semitone</option><option value="q">Quarter-tone</option></select><button id="strBtn">Sections &amp; tempo</button></div>
-  <div class="grp"><button data-tool="draw" class="on">✎ Draw</button><button data-tool="sel">▭ Select</button><button data-tool="move">✥ Move</button><button data-tool="pan">✋ Scroll</button><label for="artSel">Artic.</label><select id="artSel"></select><button id="zo">−</button><button id="zi">+</button><button id="undo">Undo</button><button id="clr">Clear track</button><button id="rmv">Remove track</button></div>
-  <div class="grp" style="margin-left:auto"><button id="vbtn">🎤 Voice → MIDI</button><button id="imp">Import MIDI</button><button id="exp" class="pri">Export MIDI</button><input type="file" id="file" accept=".mid,.midi,audio/midi,audio/x-midi" hidden></div>
+    <label for="grid">Grid</label><select id="grid"><option value="4">1/1</option><option value="2">1/2</option><option value="1">1/4</option><option value="0.5" selected>1/8</option><option value="0.25">1/16</option><option value="0.125">1/32</option><option value="0.0625">1/64</option></select>
+    <label for="qsel">Pitch</label><select id="qsel"><option value="s">Semitone</option><option value="q">¼-tone</option></select><button id="strBtn">♩ Sections</button></div>
+  <div class="grp"><button class="tl on" data-tool="draw" title="Draw" aria-label="Draw">✎<span> Draw</span></button><button class="tl" data-tool="sel" title="Select" aria-label="Select">▭<span> Select</span></button><button class="tl" data-tool="move" title="Move / resize" aria-label="Move">✥<span> Move</span></button><button class="tl" data-tool="pan" title="Scroll" aria-label="Scroll">✋<span> Scroll</span></button><select id="artSel" title="Articulation" aria-label="Articulation"></select><button id="undo">Undo</button></div>
+  <div class="grp" style="margin-left:auto"><button id="vbtn" title="Voice → MIDI" aria-label="Voice to MIDI">🎤</button><button id="imp">Import</button><button id="exp" class="pri">Export</button><input type="file" id="file" accept=".mid,.midi,audio/midi,audio/x-midi" hidden></div>
 </header>
 <div id="act" hidden><span id="asel"></span><button id="aall">Select all</button><button id="acopy">Copy</button><button id="acut">Cut</button><button id="adup">Duplicate</button><button id="apaste">Paste</button><button id="adel">Delete</button><button id="atd12">−8ve</button><button id="atd1">−1</button><button id="atu1">+1</button><button id="atu12">+8ve</button><button id="aq">Quantize</button><button id="aleg">Legato</button></div>
 <main>
   <div id="side"></div>
   <div id="sc"><div id="in"><canvas id="rc"></canvas></div></div>
+  <div id="zoom"><button id="zo" aria-label="Zoom out">−</button><button id="zi" aria-label="Zoom in">+</button></div>
 </main>
 <div id="lanebar"><button data-lane="vel" class="on">Velocity</button><button data-lane="11">Expression (CC11)</button><button data-lane="1">Dynamics (CC1)</button><button id="lclr">Reset lane</button><button id="lhide">Hide lane</button><span id="lhint"></span></div>
 <div id="lanew"><canvas id="lc"></canvas></div>
@@ -487,6 +502,7 @@ function buildSide(){
 }
 function moveTrack(i,d){const g=INST[i].grp;let j=i+d;while(j>=0&&j<T.length&&INST[j].grp!==g)j+=d;if(j<0||j>=T.length)return -1;
   pushUndo();[T[i],T[j]]=[T[j],T[i]];sync();if(cur===i)cur=j;else if(cur===j)cur=i;sel=new Set();updSel();buildSide();draw();save();return j}
+function clearTrack(i){if(!T[i]||!T[i].notes.length)return toast('This track has no notes');pushUndo();T[i].notes=[];if(i===cur){sel=new Set();updSel()}draw();save();toast('Track cleared—Undo brings it back')}
 function removeTrack(i){if(T.length<=1)return toast('Keep at least one track');pushUndo();T.splice(i,1);cur=Math.min(cur>i?cur-1:cur,T.length-1);sync();buildSide();selectTrack(cur);save();toast('Track removed—Undo brings it back')}
 function trackOpts(i){openModal('Track options',bx=>{
   const nm=document.createElement('input');nm.className='cn';nm.value=INST[i].n;nm.setAttribute('aria-label','Track name');nm.onchange=()=>{T[i].nm=nm.value.trim().slice(0,40)||undefined;sync();buildSide();save()};bx.append(nm);
@@ -500,7 +516,7 @@ function trackOpts(i){openModal('Track options',bx=>{
   [['▲ Move up',-1],['▼ Move down',1]].forEach(([t,d])=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{const j=moveTrack(i,d);if(j>=0)trackOpts(j);else toast(d<0?'Already first in its group':'Already last in its group')};r.append(b)});bx.append(r);
   const bar=document.createElement('div');bar.className='ca';bar.style.marginTop='16px';
   const rm=document.createElement('button');rm.textContent='Remove track';rm.onclick=()=>{closeModal();removeTrack(i)};
-  const dn=document.createElement('button');dn.className='pri';dn.textContent='Done';dn.onclick=closeModal;bar.append(dn,rm);bx.append(bar);
+  const dn=document.createElement('button');dn.className='pri';dn.textContent='Done';const cl=document.createElement('button');cl.textContent='Clear all notes';cl.onclick=()=>{closeModal();clearTrack(i)};dn.onclick=closeModal;bar.append(dn,cl,rm);bx.append(bar);
 })}
 function applyGains(){if(playing)chains.forEach((g,i)=>g.gain.setTargetAtTime(eff(i),ac.currentTime,.02))}
 function selectTrack(i){cur=i;sel=new Set();updSel();buildSide();draw();const sc=$('sc'),H=RULER+((INST[i].r[1]-INST[i].r[0])*Q+1)*RH;
@@ -520,7 +536,6 @@ $('zi').onclick=()=>{P.bw=Math.min(120,P.bw*1.25);save();draw()};
 $('zo').onclick=()=>{P.bw=Math.max(10,P.bw/1.25);save();draw()};
 function doUndo(quiet){if(!undo.length)return quiet||toast('Nothing to undo');T=JSON.parse(undo.pop());sync();if(cur>=T.length)cur=T.length-1;buildSide();selectTrack(cur);save()}
 $('undo').onclick=()=>doUndo();
-$('clr').onclick=()=>{if(!T[cur].notes.length)return;pushUndo();T[cur].notes=[];sel=new Set();updSel();draw();save();toast('Track cleared—Undo brings it back')};
 window.addEventListener('resize',draw);
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
 
@@ -574,19 +589,34 @@ async function saveFiles(files,zipName,raw){
     for(const f of files){const r=await pl.Filesystem.writeFile({path:dir+'/'+f.name.replace(/\//g,'_'),data:b64(f.data),directory:'CACHE',recursive:true});uris.push(r.uri)}
     await pl.Share.share({title:zipName,files:uris});return 'shared';
   }
-  const zb=raw?new Blob([files[0].data],{type:'application/json'}):zip(files);let dl=null;
-  try{dl=window.claude&&await claude.use('downloads')}catch(e){}
-  if(dl){await dl.save({filename:zipName,data:zb});return 'saved'}
-  const a=document.createElement('a');a.href=URL.createObjectURL(zb);a.download=zipName;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);return 'saved';
+  let dl=null;try{dl=window.claude&&await claude.use('downloads')}catch(e){}
+  const zipIt=!(raw||(files.length===1&&!dl)),f0=files[0];
+  const blob=zipIt?zip(files):new Blob([f0.data],{type:/\.json$/.test(f0.name)?'application/json':'audio/midi'}),fname=zipIt?zipName:f0.name;
+  if(dl){await dl.save({filename:fname,data:blob});return zipIt?'zip':'saved'}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);return zipIt?'zip':'saved';
 }
-$('exp').onclick=async()=>{
-  const ix=T.map((t,i)=>i).filter(i=>T[i].notes.length);
-  if(!ix.length)return toast('Add some notes first');expWarn=false;
-  const pad=n=>String(n).padStart(2,'0'),nm=slug($('pname').textContent),files=[{name:nm+'.mid',data:midi(ix,$('pname').textContent||'Sketch')}];
-  ix.forEach(i=>files.push({name:'stems/'+pad(i+1)+'-'+slug(INST[i].n)+'.mid',data:midi([i],INST[i].n)}));
-  try{const r=await saveFiles(files,nm+'-midi.zip');toast((expWarn?'Some quarter-tone notes were rounded (no free MIDI channel left). ':'')+(r==='shared'?'Choose where to save the MIDI files':'Saved. Unzip it to get the .mid files'))}
-  catch(err){const c=err&&err.code,m=err&&err.message||'';toast(c==='declined'||/cancel|dismiss/i.test(m)?'Export cancelled':c==='host_unavailable'?'This app can’t save files—open the page in Chrome instead':'Export failed: '+(m||'unknown error'))}
+$('exp').onclick=()=>{
+  if(!T.some(t=>t.notes.length))return toast('Add some notes first');
+  let pf={};try{pf=JSON.parse(localStorage.getItem('orch-exp')||'{}')}catch(e){}
+  openModal('Export MIDI',bx=>{
+    const mk=(t,on)=>{const lb=document.createElement('label');lb.style.cssText='display:flex;gap:10px;align-items:center;margin:10px 0;font-size:15px;color:var(--ink)';const c=document.createElement('input');c.type='checkbox';c.checked=on;c.style.cssText='width:22px;height:22px';lb.append(c,t);bx.append(lb);return c};
+    const a=mk('Full arrangement — one .mid with all tracks',pf.all!==false),b=mk('Each track as its own .mid file',!!pf.each);
+    const p=document.createElement('p');p.style.cssText='color:var(--mute);font-size:13px;margin:4px 0 0';p.textContent='Empty tracks are skipped. Several files are bundled in a .zip (or shared as separate files in the Android app).';bx.append(p);
+    const bar=document.createElement('div');bar.className='ca';bar.style.marginTop='14px';
+    const go=document.createElement('button');go.className='pri';go.textContent='Export';const no=document.createElement('button');no.textContent='Cancel';no.onclick=closeModal;
+    go.onclick=()=>{if(!a.checked&&!b.checked)return toast('Choose at least one option');try{localStorage.setItem('orch-exp',JSON.stringify({all:a.checked,each:b.checked}))}catch(e){}closeModal();doExport(a.checked,b.checked)};
+    bar.append(go,no);bx.append(bar);
+  });
 };
+async function doExport(all,each){
+  const ix=T.map((t,i)=>i).filter(i=>T[i].notes.length);if(!ix.length)return;expWarn=false;
+  const pad=n=>String(n).padStart(2,'0'),title=$('pname').textContent||'Sketch',nm=slug(title),files=[];
+  if(all)files.push({name:nm+'.mid',data:midi(ix,title)});
+  if(each)ix.forEach(i=>files.push({name:(all?'tracks/':'')+pad(i+1)+'-'+slug(INST[i].n)+'.mid',data:midi([i],INST[i].n)}));
+  try{const r=await saveFiles(files,nm+(all?'-midi':'-tracks')+'.zip');
+    toast((expWarn?'Some quarter-tone notes were rounded (no free MIDI channel left). ':'')+(r==='shared'?'Choose where to save the MIDI files':r==='zip'?'Saved a .zip — unzip it to get the .mid files':'Saved'))}
+  catch(err){const c=err&&err.code,m=err&&err.message||'';toast(c==='declined'||/cancel|dismiss/i.test(m)?'Export cancelled':c==='host_unavailable'?'This app can’t save files—open the page in Chrome instead':'Export failed: '+(m||'unknown error'))}
+}
 
 /* ---------- modal, instruments ---------- */
 function openModal(title,fn){const m=$('modal');m.innerHTML='';const bx=document.createElement('div');bx.className='box';const h=document.createElement('h3');h.textContent=title;bx.append(h);fn(bx);m.append(bx);m.hidden=false}
@@ -599,7 +629,6 @@ function addDialog(){openModal('Add instrument',bx=>{
     arr.forEach(I=>{const x=document.createElement('button');x.innerHTML='<span class="dot"></span><span></span>';x.firstChild.style.background=I.c;x.lastChild.textContent=I.n;x.onclick=()=>{addTrack(I.k);closeModal()};g.append(x)});bx.append(g)};
   sec('Voices',EXTRA.filter(I=>I.v));sec('More instruments',EXTRA.filter(I=>!I.v));sec('Standard orchestra',BASE);
   const c=document.createElement('button');c.textContent='Cancel';c.style.marginTop='14px';c.onclick=closeModal;bx.append(c)})}
-$('rmv').onclick=()=>removeTrack(cur);
 $('menuBtn').onclick=showMenu;
 
 /* ---------- MIDI import ---------- */
@@ -696,7 +725,7 @@ function doImport(m,ch,replace,useTempo){
 
 /* ---------- velocity / expression lane ---------- */
 let lane='vel',laneOn=true,lp=null;
-const lc=$('lc'),lx=lc.getContext('2d'),LH=96;
+const lc=$('lc'),lx=lc.getContext('2d'),LH=80;
 const HINTS={vel:'Drag across the stems to set velocity — affects selected notes, or all notes if none are selected',11:'Draw an expression curve (CC11): plays back and exports',1:'Draw a dynamics / mod-wheel curve (CC1): exports only, many sample libraries use it for dynamics'};
 const vOfY=y=>Math.max(lane==='vel'?1:0,Math.min(127,Math.round(127*(1-(y-6)/(LH-12)))));
 const yOfV=v=>6+(LH-12)*(1-v/127);
